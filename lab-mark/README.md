@@ -1,6 +1,6 @@
 ![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) Code-401-Javascript Lab-13-14
 ===
-This is day 11-12 of lab with Code Fellows. The purpose of the labs is to teach students how to utilize express and other various node modules to create rest-apis.
+This is day 13-14 of lab with Code Fellows. The purpose of the labs is to teach students how to utilize express and other various node modules to create rest-apis.
 ### How to start server:
 In a terminal, navigate to the lab-mark directory and install the required dependencies by typing `npm i`. Refer to the commands below to interact with the software.
 * ##### Start the database: `npm run dbon`
