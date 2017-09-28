@@ -34,6 +34,7 @@ module.exports = {
         resolve();
       });
     })
+
       .then(() => {
         return mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
       });
@@ -50,7 +51,8 @@ module.exports = {
         console.log('SERVER OFF');
         resolve();
       });
-    }).then(() => mongoose.disconnect());
+    })
+      .then(() => mongoose.disconnect());
 
   },
 };
