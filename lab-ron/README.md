@@ -3,7 +3,7 @@
 ## About
 
 This is a blog application api to serve blog post from multiple authors
-
+```
 Email
 Username
 Password
@@ -15,7 +15,7 @@ Date Published
 Date Modified
 Tags
 Comments
-
+```
 
 ## Set up
 
