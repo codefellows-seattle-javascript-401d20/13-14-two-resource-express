@@ -187,22 +187,7 @@ describe('/books', () => {
     // PUT: test 400, it should respond with 'bad request'
     // if no request body was provided or the body was invalid
     test('should respond with a 400 status due to lack of title', () => {
-      let tempBook = {
-        releaseDate: 'someday',
-      };
-      return bookMockCreate()
-      .then(book => {
-        return superagent.put(`${apiURL}/books/${book._id}`)
-        .send(tempBook);
-      })
-      .then(res => {
-        expect(res.status).toEqual(400);
-        // expect(res.body._id).toBeTruthy();
-        // expect(res.body.title).toEqual(tempBook.title);
-        // expect(res.body.author).toEqual(tempBook.author);
-        // expect(res.body.description).toEqual(tempBook.description);
-        // expect(res.body.keywords).toEqual(tempBook.keywords);
-      });
+
     });
   });
 
