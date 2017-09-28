@@ -30,6 +30,26 @@ describe('/sandwiches', () => {
   afterAll(server.stop);
   afterEach(() => Sandwich.remove({}));
 
+  describe('GET /sandwiches/:id', () => {
+    test('200', () => {
+      let tempSandwich;
+      return sandwichMockCreate()
+      .then(sandwich => {
+        tempSandwich = sandwich;
+        return superagent.get(`${apiURL}/sandwiches/${sandwich._id}`);
+      })
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.body._id).toEqual(tempSandwich._id.toString());
+        expect(res.body.title).toEqual(tempSandwich.title);
+        expect(res.body.bread).toEqual(tempSandwich.bread);
+        expect(res.body.cheese).toEqual(tempSandwich.cheese);
+        expect(JSON.stringify(res.body.spread)).toEqual(JSON.stringify(tempSandwich.spread));
+        expect(JSON.stringify(res.body.veggies)).toEqual(JSON.stringify(tempSandwich.veggies));
+      });
+    });
+  });
+
   describe('POST /sandwiches', () => {
     test('200', () => {
       return superagent.post(`${apiURL}/sandwiches`)
@@ -96,6 +116,41 @@ describe('/sandwiches', () => {
     .then(Promise.reject)
     .catch(res => {
       expect(res.status).toEqual(400);
+    });
+  });
+
+  describe('PUT /sandwiches/:id', () => {
+    test('200', () => {
+      let tempSandwich; 
+      return sandwichMockCreate()
+      .then(sandwich => {
+        tempSandwich = sandwich;
+        return superagent.put(`${apiURL}/sandwiches/${sandwich._id}`)
+        .send({
+          title: 'badass sammy',
+          veggies: ['onions', 'banana peppers'],
+        });
+      })
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.body._id).toEqual(tempSandwich._id.toString());
+        expect(res.body.title).toEqual('badass sammy');
+        expect(res.body.veggies).toEqual(['onions', 'banana peppers']);
+      });
+    });
+  });
+
+  describe('DELETE /sandwiches/:id', () => {
+    test('200', () => {
+      let tempSandwich;
+      return sandwichMockCreate()
+      .then(sandwich => {
+        tempSandwich = sandwich;
+        return superagent.delete(`${apiURL}/sandwiches/${sandwich._id}`);
+      })
+      .then(res => {
+        expect(res.status).toEqual(204);
+      });
     });
   });
 
