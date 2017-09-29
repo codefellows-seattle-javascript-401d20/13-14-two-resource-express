@@ -15,6 +15,8 @@ app.use(cors({ origin: process.env.ORIGIN_URL }));
 app.use(morgan('dev'));
 
 app.use(require('../route/sandwich-router.js'));
+app.use(require('../route/menu-router.js'));
+
 app.all('*', (req, res) => res.sendStatus(404));
 app.use(require('./error-middleware.js'));
 

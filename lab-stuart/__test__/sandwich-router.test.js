@@ -1,29 +1,14 @@
 'use strict';
 
-process.env.PORT = 7000;
-process.env.CORS_ORIGIN = 'http://localhost:8080';
-process.env.MONGODB_URI = 'mongodb://localhost/testing';
+require('./lib/setup.js');
 
 const faker = require('faker');
 const superagent = require('superagent');
 const server = require('../lib/server.js');
+const sandwichMock = require('./lib/sandwich-mock.js');
 const Sandwich = require('../model/sandwich.js');
 
 let apiURL = `http://localhost:${process.env.PORT}`;
-
-let sandwichMockCreate = () => {
-  return new Sandwich({
-    title: faker.lorem.words(10),
-    bread: faker.lorem.words(5),
-    cheese: faker.lorem.words(5),
-    spread: faker.lorem.words(5).split(' '),
-    veggies: faker.lorem.words(5).split(' '),
-  }).save();
-}
-
-let sandwichMockCreateMany = (num) => {
-  return Promise.all(new Array(num).fill(0).map(() => sandwichMockCreate()));
-}
 
 describe('/sandwiches', () => {
   beforeAll(server.start);
@@ -33,7 +18,7 @@ describe('/sandwiches', () => {
   describe('GET /sandwiches/:id', () => {
     test('200', () => {
       let tempSandwich;
-      return sandwichMockCreate()
+      return sandwichMock.create()
       .then(sandwich => {
         tempSandwich = sandwich;
         return superagent.get(`${apiURL}/sandwiches/${sandwich._id}`);
@@ -73,7 +58,7 @@ describe('/sandwiches', () => {
   });
 
   test('409 due to duplicate title', () => {
-    return sandwichMockCreate()
+    return sandwichMock.create()
     .then(sandwich => {
       return superagent.post(`${apiURL}/sandwiches`)
       .send({
@@ -122,7 +107,7 @@ describe('/sandwiches', () => {
   describe('PUT /sandwiches/:id', () => {
     test('200', () => {
       let tempSandwich; 
-      return sandwichMockCreate()
+      return sandwichMock.create()
       .then(sandwich => {
         tempSandwich = sandwich;
         return superagent.put(`${apiURL}/sandwiches/${sandwich._id}`)
@@ -143,7 +128,7 @@ describe('/sandwiches', () => {
   describe('DELETE /sandwiches/:id', () => {
     test('200', () => {
       let tempSandwich;
-      return sandwichMockCreate()
+      return sandwichMock.create()
       .then(sandwich => {
         tempSandwich = sandwich;
         return superagent.delete(`${apiURL}/sandwiches/${sandwich._id}`);
