@@ -1,14 +1,14 @@
-'use strict';
+'use strict'
 
-const faker = require('faker');
-const sandwichMock = require('./sandwich-mock.js');
-const Menu = require('../../model/menu.js');
+const faker = require('faker')
+const menuMock = require('./menu-mock.js')
+const Sandwich = require('../../model/sandwich.js')
 
 let create = () => {
-  let result = {};
-  return sandwichMock.create()
-  .then(sandwich => {
-    result.sandwich = sandwich;
+  let result = {}
+  return menuMock.create()
+  .then(menu => {
+    result.menu = menu
     return new Sandwich({
       title: faker.lorem.words(4),
       bread: faker.lorem.words(4),
@@ -16,19 +16,19 @@ let create = () => {
       spread: faker.lorem.words(4).split(' '),
       veggies: faker.lorem.words(4).split(' '),
       menu: menu._id,
-    }).save();
+    }).save()
   })
   .then(sandwich => {
-    result.sandwich = sandwich;
-    return result;
-  });
+    result.sandwich = sandwich
+    return result
+  })
 }
 
 let createMany = (num) => {
-  let result = {};
-  return sandwichMock.create()
-  .then(sandwich => {
-    result.sandwich = sandwich;
+  let result = {}
+  return menuMock.create()
+  .then(menu => {
+    result.menu = menu
     return Promise.all(new Array(num).fill(0)
     .map(() => { 
       return new Sandwich({
@@ -38,18 +38,18 @@ let createMany = (num) => {
         spread: faker.lorem.words(4).split(' '),
         veggies: faker.lorem.words(4).split(' '),
         menu: menu._id,
-      }).save();
-    }));
+      }).save()
+    }))
   })
   .then(sandwiches => {
-    result.sandwiches = sandwiches;
-    return result;
+    result.sandwiches = sandwiches
+    return result
   })
 }
 
 let remove = () => Promise.all([
   Sandwich.remove({}),
-  sandwichMock.remove(),
+  menuMock.remove(),
 ])
 
 module.exports = {create, createMany, remove}

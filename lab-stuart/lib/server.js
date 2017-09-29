@@ -1,53 +1,63 @@
-'use strict';
+'use strict'
 
-const cors = require('cors');
-const morgan = require('morgan');
-const express = require('express');
-const mongoose = require('mongoose');
+// crossite origin resource scripting
+// Access-Control-Allow-Origin: server://codefellows.com
+// Access-Control-Allow-Headers: X-Slugram-Token, Content-Type
+// Access-Control-Allow-Credentails: Cookies
+// Access-Control-Allow-Methods: HEAD, PUT
+const cors = require('cors')
+const morgan = require('morgan')
+const express = require('express')
+const mongoose = require('mongoose')
+// tell mongoose to support promises
+mongoose.Promise = Promise
 
-mongoose.Promise = Promise;
+const app = express()
+let server = null 
 
-const app = express();
-let isOn = false;
-let http = null;
+// register appwide middlware
+app.use(cors({ origin: process.env.ORIGIN_URL })) // browser request support
+app.use(morgan('dev')) // logger middleware
 
-app.use(cors({ origin: process.env.ORIGIN_URL }));
-app.use(morgan('dev'));
+// register resource routes
+app.use(require('../route/menu-router.js'))
+app.use(require('../route/sandwich-router.js'))
+// register a 404 route
+app.all('*', (req, res) => res.sendStatus(404))
+// error middleware
+app.use(require('./error-middleware.js'))
 
-app.use(require('../route/sandwich-router.js'));
-app.use(require('../route/menu-router.js'));
-
-app.all('*', (req, res) => res.sendStatus(404));
-app.use(require('./error-middleware.js'));
-
+// export interface
 module.exports = {
   start: () => {
     return new Promise((resolve, reject) => {
-      if (isOn)
-        return reject(new Error('::SERVER_ERROR:: server is allready on'));
-      http = app.listen(process.env.PORT, () => {
-        isOn = true;
-        console.log('::SERVER_ON::', process.env.PORT);
-        resolve();
-      });
+      if(server)
+        return reject(new Error('__SERVER_ERROR_ server is allready on'))
+      server = app.listen(process.env.PORT, () => {
+        console.log('__SERVER_ON__', process.env.PORT)
+        resolve()
+      })
     })
-    .then(() => {
-      return mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
-    });
+    .then(() => mongoose.connect(process.env.MONGODB_URI))
   },
   stop: () => {
     return new Promise((resolve, reject) => {
-      if (!isOn)
-        return reject(new Error('::SERVER_ERROR:: server is allready off'));
-      if (!http)
-        return reject(new Error('::SERVER_ERROR:: server does not exist'));
-      http.close(() => {
-        isOn = false;
-        http = null;
-        console.log('::SERVER_OFF::');
-        resolve();
-      });
+      if(!server)
+        return reject(new Error('__SERVER_ERROR_ server is allready off'))
+      server.close(() => {
+        server = null
+        console.log('__SERVER_OFF__')
+        resolve()
+      })
     })
-    .then(() => mongoose.disconnect());
-  }
+    .then(() => mongoose.disconnect())
+  },
 }
+
+
+
+
+
+
+
+

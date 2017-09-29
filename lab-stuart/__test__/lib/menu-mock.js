@@ -6,7 +6,7 @@ const Menu = require('../../model/menu.js');
 let create = () => {
   return new Menu({
     title: faker.lorem.words(4),
-    category: faker.lorem.words(4),
+    type: faker.lorem.words(4),
   }).save();
 }
 
