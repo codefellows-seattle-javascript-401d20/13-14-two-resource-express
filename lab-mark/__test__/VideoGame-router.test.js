@@ -1,33 +1,19 @@
 'use strict';
 
-// mock env
-process.env.PORT = 7000;
-process.env.MONGODB_URI = 'mongodb://localhost/testing';
-process.env.CORS_ORIGIN = 'http://localhost:8080';
+// mock the env
+require('./lib/setup.js');
 
 const faker = require('faker');
 const superagent = require('superagent');
-const VideoGame = require('../model/VideoGame.js');
 const server = require('../lib/server.js');
+const videogameMock = require('./lib/videogame-mock.js');
 
 const apiURL = `http://localhost:${process.env.PORT}`;
-
-const videogameMockCreate = () => {
-  return new VideoGame({
-    title: faker.lorem.words(10),
-    genre: faker.lorem.words(1),
-    console: faker.lorem.words(1),
-  }).save();
-};
-
-let videogameMockMany = (num) => {
-  return Promise.all(new Array(num).fill(0).map(() => videogameMockCreate()));
-};
 
 describe('/api/videogames', () => {
   beforeAll(server.start);
   afterAll(server.stop);
-  afterEach(() => VideoGame.remove({}));
+  afterEach(videogameMock.remove);
 
   describe('POST /api/videogames', () => {
     test('should respond with a videogame and 200 status', () => {
@@ -65,7 +51,7 @@ describe('/api/videogames', () => {
   describe('GET /api/videogames', () => {
     test('should respond with a videogame and 200 status', () => {
       let tempVideoGame;
-      return videogameMockCreate()
+      return videogameMock.create()
         .then(videogame => {
           tempVideoGame = videogame;
           return superagent.get(`${apiURL}/api/videogames/${videogame._id}`);
@@ -81,7 +67,7 @@ describe('/api/videogames', () => {
     });
 
     test('should respond with an array of all videogames and 200 status', () => {
-      return videogameMockMany(100)
+      return videogameMock.createMany(100)
         .then(() => {
           return superagent.get(`${apiURL}/api/videogames`);
         })
@@ -103,7 +89,7 @@ describe('/api/videogames', () => {
 
   describe('DELETE /api/videogames', () => {
     test('should respond with a 204 status', () => {
-      return videogameMockCreate()
+      return videogameMock.create()
         .then(videogame => {
           return superagent.delete(`${apiURL}/api/videogames/${videogame._id}`);
         })
@@ -136,7 +122,7 @@ describe('/api/videogames', () => {
         genre: faker.lorem.words(10),
         console: faker.lorem.words(10),
       };
-      return videogameMockCreate()
+      return videogameMock.create()
         .then(videogame => {
           return superagent.put(`${apiURL}/api/videogames/${videogame._id}`)
             .send(tempVideoGame);
