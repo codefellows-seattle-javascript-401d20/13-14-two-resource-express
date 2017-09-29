@@ -5,7 +5,7 @@ This is a REST API for tracking sandwich recipies.
 
 ## Setup
 First set Environment Variables
-* `export PORT=3000` 
+* `export PORT=8000` 
 * `export MONGODB_URI=mongodb://localhost/dev`
 
 To start the database and server run the following command `npm run dbon && npm run start`.  
@@ -13,11 +13,14 @@ To start the database and server run the following command `npm run dbon && npm 
 To stop the database run `npm run dboff`.
 
 ## API
+- The API supports a One to Many relationship between a Menu and Sandwiches.
+- One Menu can have multiple Sandwiches
+- A Sandwich can belong to just one Menu
+
+#### /api/menus
+#### /api/menus/:id
+- Supports GET, POST, PUT, and DELETE methods
 
 #### /api/sandwiches
-
-This lab sets up a REST API and enables CRUD operations on data stored in a Mongo database. The API exposes a single route: '/api/sandwiches', and enables GET, POST, PUT, and DELETE HTTP methods with the following path structures: '/api/sandwiches' gets an array of sandwiches, and '/api/sandwiches/:id' leverages Express param 'id' on GET, DELETE, and PUT for specific sandwiches. 
-
-Errors are handled with a custom middleware module at '/lib/error-middleware.js'. Errors are passed to the final catch with a callback of 4 params to signify the error.
-
-The test file sets up mock / temp data for testing and removes all on completing. Tests are fully independent of each other and passing 7/7.
+#### /api/sandwiches/:id
+- Supports GET, and POST methods
