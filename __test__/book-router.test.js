@@ -1,34 +1,19 @@
 'use strict';
 
 // mock the env
-process.env.PORT = 7000;
-process.env.CORS_ORIGIN = 'http://localhost:8080';
-process.env.MONGODB_URI = 'mongodb://localhost/testing';
+require('./lib/setup.js');
 
 const superagent = require('superagent');
-const Book = require('../model/book.js');
-const faker = require('faker');
 const server = require('../lib/server.js');
+const bookMock = require('./lib/book-mock.js');
+const faker = require('faker');
 
 const apiURL = `http://localhost:${process.env.PORT}`;
-
-const bookMockCreate = () => {
-  return new Book({
-    title: faker.lorem.words(10),
-    author: faker.name.findName(),
-    description: faker.lorem.words(100),
-    keywords: faker.lorem.words(5).split(' '),
-  }).save();
-};
-
-let mockManyBooks = (num) => {
-  return Promise.all(new Array(num).fill(0).map(() => bookMockCreate()));
-};
 
 describe('/books', () => {
   beforeAll(server.start);
   afterAll(server.stop);
-  afterEach(() => Book.remove({}));
+  afterEach(bookMock.remove);
 
   describe('POST /books', () => {
     // POST: test 200, it should respond with the body content
@@ -55,7 +40,7 @@ describe('/books', () => {
     // POST: test 409, it should respond with 'conflict'
     // if a request is made for a duplicate of a unique key
     test('should respond with a 409 status', () => {
-      return bookMockCreate()
+      return bookMock.create()
       .then(book => {
         return superagent.post(`${apiURL}/books`)
         .send({
@@ -101,7 +86,7 @@ describe('/books', () => {
     describe('GET /books/:id', () => {
       test('should respond with a book and 200 status', () => {
         let tempBook;
-        return bookMockCreate()
+        return bookMock.create()
         .then(book => {
           tempBook = book;
           return superagent.get(`${apiURL}/books/${book._id}`);
@@ -145,14 +130,14 @@ describe('/books', () => {
 
   // PUT
   describe('PUT /books/:id', () => {
-    test('200', () => {
+    test('should respond with a 200 status', () => {
       let tempBook = {
         title: faker.lorem.words(10),
         author: faker.name.findName(),
         description: faker.lorem.words(100),
         keywords: [faker.lorem.words(1), faker.lorem.words(1)],
       };
-      return bookMockCreate()
+      return bookMock.create()
       .then(book => {
         return superagent.put(`${apiURL}/books/${book._id}`)
         .send(tempBook);
@@ -183,18 +168,31 @@ describe('/books', () => {
           expect(res.status).toEqual(404);
         });
     });
-
+  });
     // PUT: test 400, it should respond with 'bad request'
     // if no request body was provided or the body was invalid
-    test('should respond with a 400 status due to lack of title', () => {
-
-    });
-  });
+    // test.only('should respond with a 400 status due to lack of title', () => {
+  //     let tempBook = {
+  //       author: faker.name.findName(),
+  //       description: faker.lorem.words(100),
+  //       keywords: [faker.lorem.words(1), faker.lorem.words(1)],
+  //     };
+  //     return bookMockCreate()
+  //     .then(book => {
+  //       return superagent.put(`${apiURL}/books/${book._id}`)
+  //       .send(tempBook)
+  //       .then(Promise.reject)
+  //       .catch(res => {
+  //         expect(res.status).toEqual(404);
+  //       });
+  //     })
+  //   });
+  // });
 
   describe('DELETE /books/:id', () => {
     test('should respond with a 204', () => {
       let tempBook;
-      return bookMockCreate()
+      return bookMock.create()
       .then(book => {
         tempBook = book;
         return superagent.delete(`${apiURL}/books/${book._id}`);

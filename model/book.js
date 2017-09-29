@@ -7,7 +7,7 @@ const bookSchema = mongoose.Schema({
   author: {type: String, required: true},
   description: {type: String, minlength: 10},
   keywords: [{type: String}],
-  // reviews: [{type: mongoose.Schema.Types.ObjectID, ref: 'review'}]
+  reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'review'}],
 });
 
-module.exports = mongoose.model('books', bookSchema);
+module.exports = mongoose.model('book', bookSchema);

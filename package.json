@@ -32,7 +32,8 @@
     "http-errors": "^1.6.2",
     "mongodb": "^2.2.31",
     "mongoose": "^4.11.13",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "nodemon": "^1.12.1"
   },
   "devDependencies": {
     "faker": "^4.1.0",

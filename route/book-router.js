@@ -4,7 +4,6 @@
 const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 const httpErrors = require('http-errors');
-
 // app dependencies
 const Book = require('../model/book.js');
 // module interface
@@ -30,6 +29,9 @@ bookRouter.post('/books', jsonParser, (req, res, next) => {
 // if the id is not found respond with a 404
 // if the request is invalid it should respond with a 400
 bookRouter.put('/books/:id', jsonParser, (req, res, next) => {
+  if(!req.body.title || !req.body.author)
+    return next(httpErrors(400, 'title and author are required'));
+
   let options = {new: true, runValidators: true};
   Book.findByIdAndUpdate(req.params.id, req.body, options)
   .then(book => {
