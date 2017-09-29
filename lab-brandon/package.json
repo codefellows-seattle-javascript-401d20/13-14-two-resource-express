@@ -4,28 +4,28 @@
   "description": "",
   "main": "index.js",
   "directories": {
-    "lib": "lib",
+    "lib": "lib"
   },
-  "scripts": {
-    "start": "node index.js",
-   "dbon": "mkdir -p ./db && mongod --dbpath ./db",
-   "dboff": "killall mongod",
-   "test": "jest -i --coverage",
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
+    "faker": "^4.1.0",
     "http-errors": "^1.6.2",
+    "jest": "^21.2.0",
     "mongoose": "^4.11.13",
     "morgan": "^1.9.0",
+    "superagent": "^3.6.0"
   },
-  "devDependencies": {
-    "faker": "^4.1.0",
-    "jest": "^21.2.0",
-    "superagent": "^3.6.0",
-  }
+  "devDependencies": {},
+  "scripts": {
+     "lint": "eslint .",
+     "start": "node index.js",
+     "test": "jest -i --coverage",
+     "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+     "dboff": "killall mongod",
+     "watch": "nodemon index.js"
+   },
+  "author": "",
+  "license": "ISC"
 }
