@@ -1,0 +1,38 @@
+{
+  "name": "13-14-two-resource-express",
+  "version": "1.0.0",
+  "description": "![cf](https://i.imgur.com/7v5ASc8.png) Lab 13: Express and Mongo two resoruce REST API\r ======",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint .",
+    "test": "jest -i --coverage",
+    "dbon": "mkdir -p ./db && mongod.exe --dbpath ./db",
+    "dboff": "killall mongod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Penssake/13-14-two-resource-express.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Penssake/13-14-two-resource-express/issues"
+  },
+  "homepage": "https://github.com/Penssake/13-14-two-resource-express#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.5",
+    "mongoose": "^4.11.13",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.12.1"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "jest": "^21.2.0",
+    "superagent": "^3.6.0"
+  }
+}
