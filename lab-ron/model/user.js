@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema({
   state: { type: String },
   about: { type: String, require: false },
   timestamp: { type: Date, default: () => new Date() },
+  blogs: [{type: mongoose.Schema.Types.ObjectId, ref: 'blog'}],
 });
 
 
