@@ -1,6 +1,5 @@
 'use strict';
 
-// mock the env
 process.env.PORT = 4000;
 process.env.CORS_ORIGIN = 'http://localhost:8080';
 process.env.MONGODB_URI = 'mongodb://localhost/testing';
@@ -15,7 +14,8 @@ let apiURL = `http://localhost:${process.env.PORT}`;
 let bookMockCreate = () => {
   return new Book({
     title: faker.lorem.words(7),
-    keywords: faker.lorem.words(5).split(' '),
+    author: faker.lorem.words(5).split(' '),
+    chapterContent: faker.lorem.words(7),
   }).save();
 };
 
@@ -32,15 +32,17 @@ describe('/books', () => {
     test('200', () => {
       return superagent.post(`${apiURL}/books`)
         .send({
-          title: 'shark in the dark',
-          keywords: ['cool', 'beans'],
+          title: 'Enders Game',
+          author: 'Orson Scott Card',
+          chapterContent: 'death to the buggers!',
         })
         .then(res => {
           expect(res.status).toEqual(200);
           expect(res.body._id).toBeTruthy();
           expect(res.body.timestamp).toBeTruthy();
-          expect(res.body.title).toEqual('shark in the dark');
-          expect(res.body.keywords).toEqual(['cool', 'beans']);
+          expect(res.body.title).toEqual('Enders Game');
+          expect(res.body.author).toEqual('Orson Scott Card');
+          expect(res.body.chapterContent).toEqual('death to the buggers!');
         });
     });
 
@@ -50,7 +52,7 @@ describe('/books', () => {
           return superagent.post(`${apiURL}/books`)
             .send({
               title: book.title,
-              keywords: [],
+              author: book.author,
             });
         })
         .then(Promise.reject)
@@ -58,11 +60,44 @@ describe('/books', () => {
           expect(res.status).toEqual(409);
         });
     });
+    test('409 due to lack duplicate author', () => {
+      return bookMockCreate()
+        .then(book => {
+          return superagent.post(`${apiURL}/books`)
+            .send({
+              title: book.title,
+              author: book.author,
+            });
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          //409 is a conflict in the request
+          expect(res.status).toEqual(409);
+        });
+    });
 
     test('400 due to lack of title', () => {
-      return superagent.post(`${apiURL}/books`)
-        .send({})
-        .then(Promise.reject)
+      return bookMockCreate()
+        .then(book => {
+          return superagent.post(`${apiURL}/books`)
+            .send({
+              author: book.author,
+            })
+            .then(Promise.reject);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    test('400 due to lack of author', () => {
+      return bookMockCreate()
+        .then(book => {
+          return superagent.post(`${apiURL}/books`)
+            .send({
+              title: book.title,
+            })
+            .then(Promise.reject);
+        })
         .catch(res => {
           expect(res.status).toEqual(400);
         });
@@ -95,8 +130,9 @@ describe('/books', () => {
           expect(res.status).toEqual(200);
           expect(res.body._id).toEqual(tempBook._id.toString());
           expect(res.body.timestamp).toBeTruthy();
-          expect(res.body.title).toEqual('shark in the dark');
-          expect(res.body.keywords).toEqual(['cool', 'beans']);
+          expect(res.body.title).toEqual('Enders Game');
+          expect(res.body.author).toEqual('Orson Scott Card');
+          expect(res.body.content).toEqual('death to the buggers!');
         });
     });
   });
@@ -110,11 +146,14 @@ describe('/books', () => {
           return superagent.get(`${apiURL}/books/${book._id}`);
         })
         .then(res => {
+          //ok, but in a GET request, the response will contain 
+          //an entity corresponding to the requested resource
           expect(res.status).toEqual(200);
           expect(res.body._id).toEqual(tempBook._id.toString());
           expect(res.body.timestamp).toBeTruthy();
           expect(res.body.title).toEqual(tempBook.title);
-          expect(JSON.stringify(res.body.keywords)).toEqual(JSON.stringify(tempBook.keywords));
+          expect(res.body.author).toEqual(tempBook.author);
+          expect(JSON.stringify(res.body.content)).toEqual(JSON.stringify(tempBook.content));
         });
     });
   });
