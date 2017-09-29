@@ -7,42 +7,19 @@ const Beer = require('../model/beer.js');
 
 const beerRouter = module.exports = new Router();
 
-beerRouter.post('/beers', jsonParser, (req, res, next) => {
-  if(!req.body.brand)
-    return next(httpErrors(400, 'Beer model requires a brand'));
+beerRouter.get('/cards/:id', (req, res, next) => {
+  Beer.findById(req.params.id)
+  .populate('brewery')
+  .then(beer => {
+    if(!beer)
+      return httpErrors(404, 'beer not found');
+    res.json(beer);
+  })
+  .catch(next);
+});
 
+beerRouter.post('/cards', jsonParser, (req, res, next) => {
   new Beer(req.body).save()
   .then(beer => res.json(beer))
-  .catch(next);
-});
-
-beerRouter.put('/beers/:id', jsonParser, (req, res, next) => {
-  let options = {new: true, runValidators: true};
-  Beer.findByIdAndUpdate(req.params.id, req.body, options)
-  .then(beer => {
-    if(!beer)
-      throw httpErrors(404, 'beer not found');
-    res.json(beer);
-  })
-  .catch(next);
-});
-
-beerRouter.get('/beers/:id', (req, res, next) => {
-  Beer.findById(req.params.id)
-  .then(beer => {
-    if(!beer)
-      throw httpErrors(404, 'beer not found');
-    res.json(beer);
-  })
-  .catch(next);
-});
-
-beerRouter.delete('/beers/:id', (req, res, next) => {
-  Beer.findByIdAndRemove(req.params.id)
-  .then(beer => {
-    if(!beer)
-      throw httpErrors(404, 'beer not found');
-    res.sendStatus(204);
-  })
   .catch(next);
 });
