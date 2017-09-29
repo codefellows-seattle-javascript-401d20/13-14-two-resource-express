@@ -7,7 +7,7 @@ const Beer = require('../model/beer.js');
 
 const beerRouter = module.exports = new Router();
 
-beerRouter.get('/cards/:id', (req, res, next) => {
+beerRouter.get('/beers/:id', (req, res, next) => {
   Beer.findById(req.params.id)
   .populate('brewery')
   .then(beer => {
@@ -18,8 +18,18 @@ beerRouter.get('/cards/:id', (req, res, next) => {
   .catch(next);
 });
 
-beerRouter.post('/cards', jsonParser, (req, res, next) => {
+beerRouter.post('/beers', jsonParser, (req, res, next) => {
   new Beer(req.body).save()
   .then(beer => res.json(beer))
+  .catch(next);
+});
+
+beerRouter.delete('/beers/:id', (req, res, next) => {
+  Beer.findByIdAndRemove(req.params.id)
+  .then(beer => {
+    if(!beer)
+      throw httpErrors(404, 'beer not found');
+    res.sendStatus(204);
+  })
   .catch(next);
 });

@@ -1,32 +1,18 @@
 'use strict';
 
 // mock the env
-process.env.PORT = 7000;
-process.env.CORS_ORIGIN = 'http://localhost:8080';
-process.env.MONGODB_URI = 'mongodb://localhost/testing';
+require('./lib/setup.js');
 
-const faker = require('faker');
 const superagent = require('superagent');
 const server = require('../lib/server.js');
-const Brewery = require('../model/brewery.js');
+const breweryMock = require('./lib/brewery-mock.js');
 
 let apiURL = `http://localhost:${process.env.PORT}`;
-
-let breweryMockCreate = () => {
-  return new Brewery({
-    breweryname: faker.lorem.words(7),
-    location: faker.lorem.words(5),
-  }).save();
-};
-
-let breweryMockCreateMany = (num) => {
-  return Promise.all(new Array(num).fill(0).map(() => breweryMockCreate()));
-};
 
 describe('/breweries', () => {
   beforeAll(server.start);
   afterAll(server.stop);
-  afterEach(() => Brewery.remove({}));
+  afterEach(breweryMock.remove);
 
   describe('POST /breweries', () => {
     test('200', () => {
@@ -44,7 +30,7 @@ describe('/breweries', () => {
     });
 
     test('409 due to duplicate title', () => {
-      return breweryMockCreate()
+      return breweryMock.create()
       .then(brewery => {
         return superagent.post(`${apiURL}/breweries`)
         .send({
@@ -81,7 +67,7 @@ describe('/breweries', () => {
   describe('PUT /breweries/:id', () => {
     test('200', () => {
       let tempBrewery;
-      return breweryMockCreate()
+      return breweryMock.create()
       .then(brewery => {
         tempBrewery = brewery;
         return superagent.put(`${apiURL}/breweries/${brewery._id}`)
@@ -102,7 +88,7 @@ describe('/breweries', () => {
   describe('GET /breweries/:id', () => {
     test('200', () => {
       let tempBrewery;
-      return breweryMockCreate()
+      return breweryMock.create()
       .then(brewery => {
         tempBrewery = brewery;
         return superagent.get(`${apiURL}/breweries/${brewery._id}`);
@@ -119,7 +105,7 @@ describe('/breweries', () => {
   describe('DELETE /breweries/:id', () => {
     test('200', () => {
       let tempBrewery;
-      return breweryMockCreate()
+      return breweryMock.create()
       .then(brewery => {
         tempBrewery = brewery;
         return superagent.delete(`${apiURL}/breweries/${brewery._id}`);

@@ -8,13 +8,14 @@ const beerSchema = mongoose.Schema({
   name: {type: String, required: true, unique: true},
   beerstyle: {type: String, required: true},
   abv: {type: String},
-  brewery: {type: mongoose.Schema.Types.ObjectID, require: true, ref: 'brewerie'},
+  brewery: {type: mongoose.Schema.Types.ObjectId, require: true, ref: 'brewerie'},
 });
 
 // make sure beer exists before creating one
 beerSchema.pre('save', function(done){
   Brewery.findById(this.brewery)
   .then(brewery => {
+    console.log(brewery);
     if(!brewery)
       throw httpErrors(404, 'brewery not found');
     brewery.beers.push(this._id);
