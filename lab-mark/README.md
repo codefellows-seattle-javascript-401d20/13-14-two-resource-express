@@ -1,6 +1,6 @@
 ![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) Code-401-Javascript Lab-13-14
 ===
-This is day 11-12 of lab with Code Fellows. The purpose of the labs is to teach students how to utilize express and other various node modules to create rest-apis.
+This is day 13-14 of lab with Code Fellows. The purpose of the labs is to teach students how to utilize express and other various node modules to create rest-apis. Also added a second model with a one to many relationship.
 ### How to start server:
 In a terminal, navigate to the lab-mark directory and install the required dependencies by typing `npm i`. Refer to the commands below to interact with the software.
 * ##### Start the database: `npm run dbon`
@@ -29,3 +29,21 @@ Create the following routes for performing CRUD opperations on your resourcee
   * On failure due to lack of id in the query respond with a 400 status code
   * On failure due to lack of title, console, or genre data in the request, respond with a 400 status code
   * On failure due to a video game with that id not existing respond with a 404 status code
+* `POST /api/reviews`
+  * Passes data as stringifed JSON in the body of a **POST** request to create a new resource
+  * On success respond with a 200 status code and the created review
+  * On failure due to a bad request send a 400 status code
+* `GET /api/videogames?id={id}`
+  * With an id in the query string it responds with the details of a specifc review (as JSON)
+    * If the id is not found responds with a 404
+* `DELETE /api/reviews?id={id}>`
+  * The route should deletes a review with the given ID
+  * On success this return a 204 status code with no content in the body
+  * On failure due to lack of id in the query respond with a 400 status code
+  * On failure due to a review with that id not existing respond with a 404 status code
+* `PUT /api/reviews?id={id}>`
+  * The route should update a review with the given ID, with the data sent
+  * On success this return a 200 status code with the newly updated review data
+  * On failure due to lack of id in the query respond with a 400 status code
+  * On failure due to lack of title, console, or genre data in the request, respond with a 400 status code
+  * On failure due to a review with that id not existing respond with a 404 status code

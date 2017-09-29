@@ -4,11 +4,11 @@ const cors = require('cors');
 const morgan = require('morgan');
 const express = require('express');
 const mongoose = require('mongoose');
-const routes = require('../route/VideoGame-router.js');
+const videogameRoutes = require('../route/VideoGame-router.js');
+const reviewRoutes = require('../route/Review-router.js');
 
 // enable promises
 mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
 
 // express is a factory function
 const app = express();
@@ -20,7 +20,8 @@ app.use(cors({ origin: process.env.ORIGIN_URL })); // browser request support
 app.use(morgan('dev')); // logger middleware
 
 // register routes
-app.use(routes);
+app.use(videogameRoutes);
+app.use(reviewRoutes);
 
 // register 404 route
 app.all('*', (req, res) => {
@@ -40,7 +41,10 @@ module.exports = {
         console.log('__SERVER_ON__', process.env.PORT);
         resolve();
       });
-    });
+    })
+      .then(() => {
+        return mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
+      });
   },
   stop: () => {
     return new Promise((resolve, reject) => {
@@ -54,6 +58,7 @@ module.exports = {
         console.log('__SERVER_OFF__');
         resolve();
       });
-    });
+    })
+      .then(() => mongoose.disconnect());
   },
 };

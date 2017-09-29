@@ -52,7 +52,6 @@ videoGameRouter.get('/api/videogames', (req, res, next) => {
         last: `http://localhost/api/videogames?page=${lastPage}`,
       });
       res.json(result);
-
     })
     .catch(next);
 });
