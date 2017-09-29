@@ -1,5 +1,5 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const httpErrors = require('http-errors');
-const Book = require('../model/book.js')
+process.env.PORT = 7000;
+process.env.CORS_ORIGIN = 'http://localhos:8080';
+process.env.MONGODB_URI = 'mongodb://localhost/testing';
