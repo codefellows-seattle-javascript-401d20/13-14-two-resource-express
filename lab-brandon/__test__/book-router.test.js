@@ -22,9 +22,29 @@ describe('/chapters', () => {
           return superagent.post(`${apiURL}/chapters`)
             .send({
               content: 'Ender was young as hell',
-              book: book._id, 
-            })
-        })
-    })
+              book: book._id,
+            });
+        }).then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body._id).tobeTruthy();
+          expect(res.body.timeStamp).tobeTruth();
+          expect(res.body.book).toEqual(tempMock._id.toString());
+          expect(res.body.content).toEqual('Ender was young as hell');
+        });
+    });
+    //404 error code is "not found"
+    test('should return a 404', ()=>{
+      return superagent.post(`${apiURL}/chapters`)
+        .send({
+          content: 'Ender was young as hell',
+          book: book._id,
+        }).then(Promise.reject)
+        .catch(res=>{
+          expect(res.status).toEqual(404);
+        });
+    });
+  });
+  describe('GET /books/:id', () =>{
+
   })
 })
