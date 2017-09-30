@@ -4,7 +4,6 @@ process.env.PORT = 4000;
 process.env.CORS_ORIGIN = 'http://localhost:8080';
 process.env.MONGODB_URI = 'mongodb://localhost/testing';
 
-const faker = require('faker');
 const superagent = require('superagent');
 const server = require('../lib/server.js');
 const Book = require('../model/book.js');
