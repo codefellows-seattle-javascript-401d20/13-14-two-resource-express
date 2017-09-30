@@ -1,3 +1,4 @@
+'use strict';
 const faker = require('faker');
 const Book = require('../../model/book.js');
 
