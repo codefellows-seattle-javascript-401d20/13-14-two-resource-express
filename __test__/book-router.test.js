@@ -168,26 +168,45 @@ describe('/books', () => {
           expect(res.status).toEqual(404);
         });
     });
-  });
+
     // PUT: test 400, it should respond with 'bad request'
     // if no request body was provided or the body was invalid
-    // test.only('should respond with a 400 status due to lack of title', () => {
-  //     let tempBook = {
-  //       author: faker.name.findName(),
-  //       description: faker.lorem.words(100),
-  //       keywords: [faker.lorem.words(1), faker.lorem.words(1)],
-  //     };
-  //     return bookMockCreate()
-  //     .then(book => {
-  //       return superagent.put(`${apiURL}/books/${book._id}`)
-  //       .send(tempBook)
-  //       .then(Promise.reject)
-  //       .catch(res => {
-  //         expect(res.status).toEqual(404);
-  //       });
-  //     })
-  //   });
-  // });
+    test('should respond with a 400 status due to lack of title', () => {
+      let tempBook = {
+        author: faker.name.findName(),
+        description: faker.lorem.words(100),
+        keywords: [faker.lorem.words(1), faker.lorem.words(1)],
+      };
+      return bookMock.create()
+      .then(book => {
+        return superagent.put(`${apiURL}/books/${book._id}`)
+        .send(tempBook)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+      });
+    });
+
+    // PUT: test 409, it should respond with 'conflict'
+    // if a request is made for a duplicate of a unique key
+    // test('should respond with a 409 status', () => {
+      // return bookMock.create()
+      // .then(book => {
+      //   return superagent.put(`${apiURL}/books`)
+      //   .send({
+      //     title: book.title,
+      //     author: book.author,
+      //     description: book.description,
+      //     keywords: [],
+      //   });
+      // })
+      // .then(Promise.reject)
+      // .catch(res => {
+      //   expect(res.status).toEqual(409);
+      // });
+    // });
+  });
 
   describe('DELETE /books/:id', () => {
     test('should respond with a 204', () => {
