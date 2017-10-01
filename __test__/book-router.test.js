@@ -16,8 +16,6 @@ describe('/books', () => {
   afterEach(bookMock.remove);
 
   describe('POST /books', () => {
-    // POST: test 200, it should respond with the body content
-    // for a post request with a valid body
     test('should respond with a book and 200 status', () => {
       let tempBook = {
         title: faker.lorem.words(10),
@@ -56,8 +54,6 @@ describe('/books', () => {
       });
     });
 
-    // POST: test 400, it should respond with 'bad request'
-    // if no request body was provided
     test('should respond with a 400 status due to lack of title', () => {
       return superagent.post(`${apiURL}/books`)
         .send({})
@@ -67,8 +63,6 @@ describe('/books', () => {
         });
     });
 
-    // POST: test 400, it should respond with 'bad request'
-    // in response to a bad request
     test('should respond with a 400 status due to bad json', () => {
       return superagent.post(`${apiURL}/books`)
         .set('Content-Type', 'application/json')
@@ -81,8 +75,6 @@ describe('/books', () => {
   });
 
   describe('GET /api/books/:id', () => {
-    // GET: test 200, it should contain a response body
-    // for a request made with a valid id
     describe('GET /books/:id', () => {
       test('should respond with a book and 200 status', () => {
         let tempBook;
@@ -102,8 +94,6 @@ describe('/books', () => {
       });
     });
 
-    // GET: test 404, it should respond with 'not found'
-    // for valid requests made with an id that was not found
     test('should respond with 404 status', () => {
       return superagent.get(`${apiURL}/api/books/hihihi`)
         .then(Promise.reject)
@@ -113,22 +103,21 @@ describe('/books', () => {
     });
   });
 
-  // describe('GET /api/books', () => {
-  //   test('should return 100 books', () => {
-  //     return mockManyBooks(1000)
-  //       .then(tempBooks => {
-  //         return superagent.get(`${apiURL}/api/books`);
-  //       })
-  //       .then(res => {
-  //         console.log(res.headers);
-  //         expect(res.status).toEqual(200);
-  //         expect(res.body.count).toEqual(1000);
-  //         expect(res.body.data.length).toEqual(100);
-  //       });
-  //   });
-  // });
+  describe('GET /api/books', () => {
+    test('should return 100 books', () => {
+      return bookMock.createMany(1000)
+        .then(tempBooks => {
+          return superagent.get(`${apiURL}/api/books`);
+        })
+        .then(res => {
+          console.log(res.headers);
+          expect(res.status).toEqual(200);
+          expect(res.body.count).toEqual(1000);
+          expect(res.body.data.length).toEqual(100);
+        });
+    });
+  });
 
-  // PUT
   describe('PUT /books/:id', () => {
     test('should respond with a 200 status', () => {
       let tempBook = {
@@ -152,8 +141,6 @@ describe('/books', () => {
       });
     });
 
-    // PUT: test 404, it should respond with 'not found'
-    // for valid requests made with an id that was not found
     test('should respond with 404 status', () => {
       let thisBook = {
         title: faker.lorem.words(10),
@@ -191,20 +178,20 @@ describe('/books', () => {
     // PUT: test 409, it should respond with 'conflict'
     // if a request is made for a duplicate of a unique key
     // test('should respond with a 409 status', () => {
-      // return bookMock.create()
-      // .then(book => {
-      //   return superagent.put(`${apiURL}/books`)
-      //   .send({
-      //     title: book.title,
-      //     author: book.author,
-      //     description: book.description,
-      //     keywords: [],
-      //   });
-      // })
-      // .then(Promise.reject)
-      // .catch(res => {
-      //   expect(res.status).toEqual(409);
-      // });
+    //   return bookMock.create()
+    //   .then(book => {
+    //     return superagent.put(`${apiURL}/books/${book._id}`)
+    //     .send({
+    //       title: book.title,
+    //       author: book.author,
+    //       description: book.description,
+    //       keywords: [],
+    //     });
+    //   })
+    //   .then(Promise.reject)
+    //   .catch(res => {
+    //     expect(res.status).toEqual(409);
+    //   });
     // });
   });
 

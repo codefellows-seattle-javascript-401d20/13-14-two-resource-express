@@ -13,7 +13,7 @@ let create = () => {
 };
 
 let createMany = (num) => {
-  return Promise.all(new Array(num).fill(0).map(() => bookMockCreate()));
+  return Promise.all(new Array(num).fill(0).map(() => create()));
 };
 
 let remove = () => Book.remove({});

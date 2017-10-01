@@ -14,7 +14,7 @@ const reviewSchema = mongoose.Schema({
 
 // Before we save a review, we want to make sure its book exists
 reviewSchema.pre('save', function(done) {
-  Book.findByID(this.book)
+  Book.findById(this.book)
   .then(book => {
     if(!book)
       throw httpErrors(404, 'book not found');
@@ -26,7 +26,7 @@ reviewSchema.pre('save', function(done) {
 });
 
 reviewSchema.post('remove', (doc, done) => {
-  Book.findByID(doc.book)
+  Book.findById(doc.book)
   .then(book => {
     if(!book)
       throw httpErrors(404, 'book not found');
