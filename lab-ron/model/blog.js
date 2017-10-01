@@ -6,7 +6,6 @@ const User = require('./user');
 
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true, unique: true },
-  author: { type: String, required: true, unique: true },
   body: { type: String, required: false, default: '' },
   isPublished: { type: Boolean },
   timestamp: { type: Date, default: () => new Date() },

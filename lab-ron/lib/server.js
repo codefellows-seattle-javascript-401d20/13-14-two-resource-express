@@ -19,6 +19,8 @@ app.use(morgan('dev')); // morgan logger
 
 // routes
 app.use(require('../route/user-route.js'));
+app.use(require('../route/blog-route.js'));
+// 404s
 app.all('*', (req, res) => res.sendStatus(404));
 // error
 app.use(require('./error-middleware'));
