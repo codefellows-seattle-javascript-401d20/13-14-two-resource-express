@@ -10,12 +10,14 @@ let create = () => {
     .then(user => {
       result.user = user;
       return new Blog({
-        title: faker.lorem.words(Math.ceil(Math.random() * 3) - 12),
-        body: faker.lorem.words(Math.ceil(Math.random() * 200) - 50),
+        title: faker.lorem.words(Math.ceil(Math.random() * 20) + 5),
+        body:  faker.lorem.words(Math.ceil(Math.random() * 200) + 5),
         isPublished: Math.random() > .5 ? true : false,
+        user: user._id,
       }).save();
     })
     .then(blog => {
+
       result.blog = blog;
       return result;
     });
