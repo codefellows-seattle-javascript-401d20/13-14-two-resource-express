@@ -18,7 +18,8 @@ blogRouter.get('/blogs/:id', (req, res, next) => {
     .catch(next);
 });
 
-blogRouter.post('/blog', jsonParser, (req, res, next) => {
+
+blogRouter.post('/blogs', jsonParser, (req, res, next) => {
   new Blog(req.body).save()
     .then(blog => res.json(blog))
     .catch(next);
