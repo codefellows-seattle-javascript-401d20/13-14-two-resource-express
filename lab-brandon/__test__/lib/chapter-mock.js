@@ -42,4 +42,4 @@ let remove = () => Promise.all([
   Chapter.remove({}),
   bookMock.remove(),
 ]);
-module.exports = (create, createMany, remove)
+module.exports = (create, createMany, remove);

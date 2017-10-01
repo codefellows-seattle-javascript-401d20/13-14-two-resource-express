@@ -170,6 +170,7 @@ describe('/books', () => {
           return superagent.delete(`${apiURL}/books/${book._id}`);
         })
         .then(res => {
+          //204 means no content
           expect(res.status).toEqual(204);
         });
     });

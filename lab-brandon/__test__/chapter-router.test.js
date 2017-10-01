@@ -22,7 +22,7 @@ describe('/chapters', () => {
           return superagent.post(`${apiURL}/chapters`)
             .send({
               content: 'Ender was young as hell',
-              book: book._id,
+              book: mock._id,
             });
         }).then(res => {
           expect(res.status).toEqual(200);
@@ -37,14 +37,25 @@ describe('/chapters', () => {
       return superagent.post(`${apiURL}/chapters`)
         .send({
           content: 'Ender was young as hell',
-          book: book._id,
         }).then(Promise.reject)
         .catch(res=>{
           expect(res.status).toEqual(404);
         });
     });
   });
-  describe('GET /books/:id', () =>{
-
-  })
-})
+  describe('GET /chapters/:id', () =>{
+    test('should return a 200 and a chapter', () => {
+      let tempBook;
+      return chapterMock.create()
+    }).then(res => {
+      expect(res.status).toEqual(200);
+      expect(res.body._id).toEqual(200);
+      expect(res.body.content).toEqual(200);
+      expect(res.body.timeStamp).toEqual(200);
+      expect(res.body.book._id).toEqual(200);
+      expect(res.body.book.title).toEqual(200);
+      //bottom is for stringified json on book keywords.  write when test is finished.
+      // expect()toEqual();
+    });
+  });
+});
