@@ -47,6 +47,10 @@ describe('/chapters', () => {
     test('should return a 200 and a chapter', () => {
       let tempBook;
       return chapterMock.create()
+        .then(mock =>{
+          tempBook = mock;
+          return superagent.get(`${apiURL}/chapters/mock.chapter._id`)
+        });
     }).then(res => {
       expect(res.status).toEqual(200);
       expect(res.body._id).toEqual(200);
