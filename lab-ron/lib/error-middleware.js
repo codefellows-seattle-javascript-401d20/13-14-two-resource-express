@@ -8,12 +8,13 @@ module.exports = (err, req, res, next) => {
 
   let message = err.message.toLowerCase();
 
+  if (message.includes('objectid failed'))
+    return res.sendStatus(404);
+
   if (message.includes('validation failed'))
     return res.sendStatus(400);
 
-  if (message.includes('objectid failed'))
-    return res.sendStatus(404);
-    
+
   if (message.includes('duplicate key'))
     return res.sendStatus(409);
 
