@@ -15,28 +15,28 @@ const reviewSchema = mongoose.Schema({
 // Before we save a review, we want to make sure its book exists
 reviewSchema.pre('save', function(done) {
   Book.findById(this.book)
-  .then(book => {
-    if(!book)
-      throw httpErrors(404, 'book not found');
-    book.reviews.push(this._id);
-    return book.save();
-  })
-  .then(() => done())
-  .catch(done);
+    .then(book => {
+      if(!book)
+        throw httpErrors(404, 'book not found');
+      book.reviews.push(this._id);
+      return book.save();
+    })
+    .then(() => done())
+    .catch(done);
 });
 
 reviewSchema.post('remove', (doc, done) => {
   Book.findById(doc.book)
-  .then(book => {
-    if(!book)
-      throw httpErrors(404, 'book not found');
-    book.reviews = book.reviews.filter(review => {
-      return review._id.toString() !== doc._id.toString();
-    });
-    return book.save();
-  })
-  .then(() => done())
-  .catch(done);
+    .then(book => {
+      if(!book)
+        throw httpErrors(404, 'book not found');
+      book.reviews = book.reviews.filter(review => {
+        return review._id.toString() !== doc._id.toString();
+      });
+      return book.save();
+    })
+    .then(() => done())
+    .catch(done);
 });
 
 module.exports = mongoose.model('review', reviewSchema);

@@ -39,19 +39,19 @@ describe('/books', () => {
     // if a request is made for a duplicate of a unique key
     test('should respond with a 409 status', () => {
       return bookMock.create()
-      .then(book => {
-        return superagent.post(`${apiURL}/books`)
-        .send({
-          title: book.title,
-          author: book.author,
-          description: book.description,
-          keywords: [],
+        .then(book => {
+          return superagent.post(`${apiURL}/books`)
+            .send({
+              title: book.title,
+              author: book.author,
+              description: book.description,
+              keywords: [],
+            });
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(409);
         });
-      })
-      .then(Promise.reject)
-      .catch(res => {
-        expect(res.status).toEqual(409);
-      });
     });
 
     test('should respond with a 400 status due to lack of title', () => {
@@ -79,18 +79,18 @@ describe('/books', () => {
       test('should respond with a book and 200 status', () => {
         let tempBook;
         return bookMock.create()
-        .then(book => {
-          tempBook = book;
-          return superagent.get(`${apiURL}/books/${book._id}`);
-        })
-        .then(res => {
-          expect(res.status).toEqual(200);
-          expect(res.body._id).toEqual(tempBook._id.toString());
-          expect(res.body.title).toEqual(tempBook.title);
-          expect(res.body.author).toEqual(tempBook.author);
-          expect(res.body.description).toEqual(tempBook.description);
-          expect(JSON.stringify(res.body.keywords)).toEqual(JSON.stringify(tempBook.keywords));
-        });
+          .then(book => {
+            tempBook = book;
+            return superagent.get(`${apiURL}/books/${book._id}`);
+          })
+          .then(res => {
+            expect(res.status).toEqual(200);
+            expect(res.body._id).toEqual(tempBook._id.toString());
+            expect(res.body.title).toEqual(tempBook.title);
+            expect(res.body.author).toEqual(tempBook.author);
+            expect(res.body.description).toEqual(tempBook.description);
+            expect(JSON.stringify(res.body.keywords)).toEqual(JSON.stringify(tempBook.keywords));
+          });
       });
     });
 
@@ -127,18 +127,18 @@ describe('/books', () => {
         keywords: [faker.lorem.words(1), faker.lorem.words(1)],
       };
       return bookMock.create()
-      .then(book => {
-        return superagent.put(`${apiURL}/books/${book._id}`)
-        .send(tempBook);
-      })
-      .then(res => {
-        expect(res.status).toEqual(200);
-        expect(res.body._id).toBeTruthy();
-        expect(res.body.title).toEqual(tempBook.title);
-        expect(res.body.author).toEqual(tempBook.author);
-        expect(res.body.description).toEqual(tempBook.description);
-        expect(res.body.keywords).toEqual(tempBook.keywords);
-      });
+        .then(book => {
+          return superagent.put(`${apiURL}/books/${book._id}`)
+            .send(tempBook);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body._id).toBeTruthy();
+          expect(res.body.title).toEqual(tempBook.title);
+          expect(res.body.author).toEqual(tempBook.author);
+          expect(res.body.description).toEqual(tempBook.description);
+          expect(res.body.keywords).toEqual(tempBook.keywords);
+        });
     });
 
     test('should respond with 404 status', () => {
@@ -165,47 +165,28 @@ describe('/books', () => {
         keywords: [faker.lorem.words(1), faker.lorem.words(1)],
       };
       return bookMock.create()
-      .then(book => {
-        return superagent.put(`${apiURL}/books/${book._id}`)
-        .send(tempBook)
-        .then(Promise.reject)
-        .catch(res => {
-          expect(res.status).toEqual(400);
+        .then(book => {
+          return superagent.put(`${apiURL}/books/${book._id}`)
+            .send(tempBook)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(400);
+            });
         });
-      });
     });
-
-    // PUT: test 409, it should respond with 'conflict'
-    // if a request is made for a duplicate of a unique key
-    // test('should respond with a 409 status', () => {
-    //   return bookMock.create()
-    //   .then(book => {
-    //     return superagent.put(`${apiURL}/books/${book._id}`)
-    //     .send({
-    //       title: book.title,
-    //       author: book.author,
-    //       description: book.description,
-    //       keywords: [],
-    //     });
-    //   })
-    //   .then(Promise.reject)
-    //   .catch(res => {
-    //     expect(res.status).toEqual(409);
-    //   });
-    // });
   });
 
   describe('DELETE /books/:id', () => {
     test('should respond with a 204', () => {
       let tempBook;
       return bookMock.create()
-      .then(book => {
-        tempBook = book;
-        return superagent.delete(`${apiURL}/books/${book._id}`);
-      })
-      .then(res => {
-        expect(res.status).toEqual(204);
-      });
+        .then(book => {
+          tempBook = book;
+          return superagent.delete(`${apiURL}/books/${book._id}`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(204);
+        });
     });
 
     test('should respond with a 404', () => {

@@ -1,6 +1,5 @@
 'use strict';
 
-
 require('./lib/setup.js');
 
 const superagent = require('superagent');
@@ -19,52 +18,70 @@ describe('/reviews', () => {
     test('should return 200 and a review', () => {
       let tempMock;
       return bookMock.create()
-      .then(mock  => {
-        tempMock = mock;
-        return superagent.post(`${apiURL}/reviews`)
-        .send({
-          title: 'Amazing book!',
-          author: 'Jane A',
-          content: 'Amazing book! I could not put it down, read it in one sitting.',
-          book: mock._id,
+        .then(mock  => {
+          tempMock = mock;
+          return superagent.post(`${apiURL}/reviews`)
+            .send({
+              title: 'Amazing book!',
+              author: 'Jane A',
+              content: 'Amazing book! I could not put it down, read it in one sitting.',
+              book: mock._id,
+            });
+        })
+        .then(res => {
+          console.log(res.body);
+          expect(res.status).toEqual(200);
+          expect(res.body._id).toBeTruthy();
+          expect(res.body.timestamp).toBeTruthy();
+          expect(res.body.book).toEqual(tempMock._id.toString());
+          expect(res.body.content).toEqual('Amazing book! I could not put it down, read it in one sitting.');
         });
-      })
-      .then(res => {
-        console.log(res.body);
-        expect(res.status).toEqual(200);
-        expect(res.body._id).toBeTruthy();
-        expect(res.body.timestamp).toBeTruthy();
-        expect(res.body.book).toEqual(tempMock._id.toString());
-        expect(res.body.content).toEqual('Amazing book! I could not put it down, read it in one sitting.');
-      });
     });
 
+    test('should respond with a 400 status due to lack of title', () => {
+      return superagent.post(`${apiURL}/reviews`)
+        .send({})
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
+
+    test('should respond with a 400 status due to bad json', () => {
+      return superagent.post(`${apiURL}/reviews`)
+        .set('Content-Type', 'application/json')
+        .send('}')
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
   });
 
   describe('GET /reviews/:id', () => {
     test('should return 200 and a review', () => {
       let tempMock;
       return reviewMock.create()
-      .then(mock  => {
-        tempMock = mock;
-        return superagent.get(`${apiURL}/reviews/${mock.review._id}`);
-      })
-      .then(res => {
-        console.log(res.body);
-        expect(res.status).toEqual(200);
-        expect(res.body._id).toEqual(tempMock.review._id.toString());
-        expect(res.body.content).toEqual(tempMock.review.content);
-        expect(res.body.timestamp).toEqual(tempMock.review.timestamp.toJSON());
-        expect(res.body.book._id).toEqual(tempMock.book._id.toString());
-        expect(res.body.book.title).toEqual(tempMock.book.title);
-        expect(res.body.book.author).toEqual(tempMock.book.author);
-        expect(JSON.stringify(res.body.book.keywords))
-          .toEqual(JSON.stringify(tempMock.book.keywords));
-      });
+        .then(mock  => {
+          tempMock = mock;
+          return superagent.get(`${apiURL}/reviews/${mock.review._id}`);
+        })
+        .then(res => {
+          console.log(res.body);
+          expect(res.status).toEqual(200);
+          expect(res.body._id).toEqual(tempMock.review._id.toString());
+          expect(res.body.content).toEqual(tempMock.review.content);
+          expect(res.body.timestamp).toEqual(tempMock.review.timestamp.toJSON());
+          expect(res.body.book._id).toEqual(tempMock.book._id.toString());
+          expect(res.body.book.title).toEqual(tempMock.book.title);
+          expect(res.body.book.author).toEqual(tempMock.book.author);
+          expect(JSON.stringify(res.body.book.keywords))
+            .toEqual(JSON.stringify(tempMock.book.keywords));
+        });
     });
 
     test('should respond with 404 status', () => {
-      return superagent.get(`${apiURL}/api/books/hihihi`)
+      return superagent.get(`${apiURL}/api/reviews/hihihi`)
         .then(Promise.reject)
         .catch(res => {
           expect(res.status).toEqual(404);
@@ -72,18 +89,25 @@ describe('/reviews', () => {
     });
   });
 
-
   describe('DELETE /reviews/:id', () => {
-    // test('should return 200', () => {
-    //   let tempBook;
-    //   return bookMock.create()
-    //   .then(book => {
-    //     tempBook = book;
-    //     return superagent.delete(`${apiURL}/books/${book._id}`);
-    //   })
-    //   .then(res => {
-    //     expect(res.status).toEqual(204);
-    //   });
-    // });
+    test('should return 204', () => {
+      let tempMock;
+      return reviewMock.create()
+        .then(mock  => {
+          tempMock = mock;
+          return superagent.delete(`${apiURL}/reviews/${mock.review._id}`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(204);
+        });
+    });
+
+    test('should respond with a 404', () => {
+      return superagent.delete(`${apiURL}/api/reviews/hahaha`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+    });
   });
 });

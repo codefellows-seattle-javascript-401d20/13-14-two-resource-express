@@ -12,27 +12,27 @@ reviewRouter.post('/reviews', jsonParser, (req, res, next) => {
     return next(httpErrors(400, 'title and content are required'));
 
   new Review(req.body).save()
-  .then(review => res.json(review))
-  .catch(next);
+    .then(review => res.json(review))
+    .catch(next);
 });
 
 reviewRouter.get('/reviews/:id', (req, res, next) => {
   Review.findById(req.params.id)
-  .populate('book')
-  .then(review => {
-    if(!review)
-      return httpErrors(404, 'review not found');
-    res.json(review);
-  })
-  .catch(next);
+    .populate('book')
+    .then(review => {
+      if(!review)
+        return httpErrors(404, 'review not found');
+      res.json(review);
+    })
+    .catch(next);
 });
 
 reviewRouter.delete('/reviews/:id', (req, res, next) => {
   Review.findByIdAndRemove(req.params.id)
-  .then(review => {
-    if(!review)
-      throw httpErrors(404, 'book not found');
-    res.sendStatus(204);
-  })
-  .catch(next);
+    .then(review => {
+      if(!review)
+        throw httpErrors(404, 'book not found');
+      res.sendStatus(204);
+    })
+    .catch(next);
 });
