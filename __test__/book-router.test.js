@@ -1,6 +1,5 @@
 'use strict';
 
-// mock the env
 require('./lib/setup.js');
 
 const superagent = require('superagent');
@@ -35,8 +34,6 @@ describe('/books', () => {
         });
     });
 
-    // POST: test 409, it should respond with 'conflict'
-    // if a request is made for a duplicate of a unique key
     test('should respond with a 409 status', () => {
       return bookMock.create()
         .then(book => {
@@ -156,8 +153,6 @@ describe('/books', () => {
         });
     });
 
-    // PUT: test 400, it should respond with 'bad request'
-    // if no request body was provided or the body was invalid
     test('should respond with a 400 status due to lack of title', () => {
       let tempBook = {
         author: faker.name.findName(),

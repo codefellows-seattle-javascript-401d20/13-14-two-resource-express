@@ -1,12 +1,11 @@
 'use strict';
 
-// npm dependencies
 const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 const httpErrors = require('http-errors');
-// app dependencies
+
 const Book = require('../model/book.js');
-// module interface
+
 const bookRouter = module.exports = new Router();
 
 bookRouter.post('/books', jsonParser, (req, res, next) => {
@@ -24,12 +23,12 @@ bookRouter.put('/books/:id', jsonParser, (req, res, next) => {
 
   let options = {new: true, runValidators: true};
   Book.findByIdAndUpdate(req.params.id, req.body, options)
-  .then(book => {
-    if(!book)
-      throw httpErrors(404, 'book not found');
-    res.json(book);
-  })
-  .catch(next);
+    .then(book => {
+      if(!book)
+        throw httpErrors(404, 'book not found');
+      res.json(book);
+    })
+    .catch(next);
 });
 
 bookRouter.get('/books/:id', (req, res, next) => {
@@ -75,10 +74,10 @@ bookRouter.get('/api/books', (req, res, next) => {
 
 bookRouter.delete('/books/:id', (req, res, next) => {
   Book.findByIdAndRemove(req.params.id)
-  .then(book => {
-    if(!book)
-      throw httpErrors(404, 'book not found');
-    res.sendStatus(204);
-  })
-  .catch(next);
+    .then(book => {
+      if(!book)
+        throw httpErrors(404, 'book not found');
+      res.sendStatus(204);
+    })
+    .catch(next);
 });

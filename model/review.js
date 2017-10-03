@@ -12,7 +12,6 @@ const reviewSchema = mongoose.Schema({
   book: {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'book'},
 });
 
-// Before we save a review, we want to make sure its book exists
 reviewSchema.pre('save', function(done) {
   Book.findById(this.book)
     .then(book => {
