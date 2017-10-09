@@ -59,10 +59,8 @@ describe('/reviews', () => {
     });
 
     test('should respond with a 409 status due to a duplicate of a unique key', () => {
-      let tempMock;
       return bookMock.create()
         .then(mock  => {
-          tempMock = mock;
           return superagent.post(`${apiURL}/reviews`)
             .send({
               title: 'Worst book!',
@@ -120,10 +118,8 @@ describe('/reviews', () => {
 
   describe('DELETE /reviews/:id', () => {
     test('should return 204', () => {
-      let tempMock;
       return reviewMock.create()
         .then(mock  => {
-          tempMock = mock;
           return superagent.delete(`${apiURL}/reviews/${mock.review._id}`);
         })
         .then(res => {
