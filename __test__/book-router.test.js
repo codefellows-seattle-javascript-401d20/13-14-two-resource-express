@@ -169,6 +169,24 @@ describe('/books', () => {
             });
         });
     });
+
+    // test('should respond with a 409 status', () => {
+    //   let tempBook = {
+    //     title: faker.lorem.words(10),
+    //     author: faker.name.findName(),
+    //     description: faker.lorem.words(100),
+    //     keywords: [faker.lorem.words(1), faker.lorem.words(1)],
+    //   };
+    //   return bookMock.create()
+    //     .then(book => {
+    //       return superagent.put(`${apiURL}/books/${book._id}`)
+    //         .send(tempBook)
+    //         .then(Promise.reject)
+    //         .catch(res => {
+    //           expect(res.status).toEqual(409);
+    //         });
+    //     });
+    // });
   });
 
   describe('DELETE /books/:id', () => {

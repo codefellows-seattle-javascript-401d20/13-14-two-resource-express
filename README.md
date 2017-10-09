@@ -10,7 +10,8 @@
   * pass a request with a resource. For a book, resource should have at least a title and author. For a review, resource should have at least a title and content.
   * if all required fields are present, respond with a 200 success code and the created book
   * if not all required fields are present, respond with a 400 status code
-  * if a request is made for a duplicate of a unique key, respond with a 409 status code
+  * for account, if a request is made for a duplicate of a unique key, respond with a 409 status code
+  * for profile and sound, if a request is made using a bad token or lack of token, respond with a 409 status code
 * `GET /api/<resource-name>` and `GET /api/<resource-name>?id={id}`
   * pass a request with an /api/<resource-name> path
     * with no id at the end of the path in the query string, if the resource is a book, the program should output an array of all of your resources

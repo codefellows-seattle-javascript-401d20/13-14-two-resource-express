@@ -10,7 +10,6 @@ const reviewRouter = module.exports = new Router();
 reviewRouter.post('/reviews', jsonParser, (req, res, next) => {
   if(!req.body.title || !req.body.content)
     return next(httpErrors(400, 'title and content are required'));
-
   new Review(req.body).save()
     .then(review => res.json(review))
     .catch(next);

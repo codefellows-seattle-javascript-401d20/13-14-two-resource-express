@@ -6,6 +6,7 @@ const superagent = require('superagent');
 const server = require('../lib/server.js');
 const reviewMock = require('./lib/review-mock.js');
 const bookMock = require('./lib/book-mock.js');
+const faker = require('faker');
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
@@ -56,6 +57,34 @@ describe('/reviews', () => {
           expect(res.status).toEqual(400);
         });
     });
+
+    test('should respond with a 409 status due to a duplicate of a unique key', () => {
+      let tempMock;
+      return bookMock.create()
+        .then(mock  => {
+          tempMock = mock;
+          return superagent.post(`${apiURL}/reviews`)
+            .send({
+              title: 'Worst book!',
+              author: 'Best Critic!',
+              content: 'I hated this book so much, my cries of anguish while reading it scared my dog.',
+              book: mock._id,
+            })
+            .then(() => {
+              return superagent.post(`${apiURL}/reviews`)
+                .send({
+                  title: 'Worst book!',
+                  author: 'Best Critic!',
+                  content: 'I hated this book so much, my cries of anguish while reading it scared my dog.',
+                  book: mock._id,
+                });
+            })
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(409);
+            });
+        });
+    });
   });
 
   describe('GET /reviews/:id', () => {
@@ -81,7 +110,7 @@ describe('/reviews', () => {
     });
 
     test('should respond with 404 status', () => {
-      return superagent.get(`${apiURL}/api/reviews/hihihi`)
+      return superagent.get(`${apiURL}/reviews/hihihi`)
         .then(Promise.reject)
         .catch(res => {
           expect(res.status).toEqual(404);
@@ -103,7 +132,7 @@ describe('/reviews', () => {
     });
 
     test('should respond with a 404', () => {
-      return superagent.delete(`${apiURL}/api/reviews/hahaha`)
+      return superagent.delete(`${apiURL}/reviews/hahaha`)
         .then(Promise.reject)
         .catch(res => {
           expect(res.status).toEqual(404);
