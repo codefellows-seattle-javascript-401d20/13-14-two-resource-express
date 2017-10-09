@@ -1,0 +1,43 @@
+{
+  "name": "13-14-two-resource-express",
+  "version": "0.0.1",
+  "description": "![cf](https://i.imgur.com/7v5ASc8.png) Lab 13: Express and Mongo two resoruce REST API ======",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "start": "node index.js",
+    "test": "jest -i --coverage",
+    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "dboff": "killall mongod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KatherineHanson/13-14-two-resource-express.git"
+  },
+  "keywords": [],
+  "author": "katherinemariehanson@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KatherineHanson/13-14-two-resource-express/issues"
+  },
+  "homepage": "https://github.com/KatherineHanson/13-14-two-resource-express#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.5",
+    "http-errors": "^1.6.2",
+    "mongodb": "^2.2.31",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.12.1"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "jest": "^21.2.0",
+    "mongoose": "^4.11.14",
+    "superagent": "^3.6.0"
+  }
+}
