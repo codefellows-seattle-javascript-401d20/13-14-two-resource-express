@@ -20,8 +20,10 @@ userRouter.put('/users/:id', jsonParser, (req, res, next) => {
   let options = { new: true, runValidators: true };
   User.findByIdAndUpdate(req.params.id, req.body, options)
     .then(user => {
-      if (!user)
-        throw httpErrors(404, 'user not found');
+      if (!user) {
+        throw httpErrors(404, 'user not found here');
+      }
+      console.log(user);
       res.json(user);
     })
     .catch(next);

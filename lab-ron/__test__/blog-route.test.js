@@ -15,8 +15,6 @@ describe('/blogs', () => {
   afterEach(blogMock.remove);
 
   describe('POST /blogs/id', () => {
-
-
     test('should return 200 and a blog', () => {
       let tempMock;
       return userMock.create()
@@ -50,26 +48,23 @@ describe('/blogs', () => {
           expect(res.status).toEqual(404);
         });
     });
+  });
 
-    describe('GET /blogs/:id', () => {
-      test('should return 200 and a blog', () => {
-        let tempMock;
-        return blogMock.create()
-          .then(mock => {
-            tempMock = mock;
-            console.log(tempMock);
-            console.log(mock);
-            return superagent.get(`${apiURL}/blogs/${mock.blog._id}`);
-          })
-          .then(res => {
-            console.log(res.body);
-            expect(res.status).toEqual(200);
-            expect(res.body._id).toEqual(tempMock.blog._id.toString());
-            expect(res.body.body).toEqual(tempMock.blog.body);
-            expect(res.body.timestamp).toEqual(tempMock.blog.timestamp.toJSON());
-            expect(res.body.user._id).toEqual(tempMock.user._id.toString());
-          });
-      });
+  describe('GET /blogs/:id', () => {
+    test('should return 200 and a blog', () => {
+      let tempMock;
+      return blogMock.create()
+        .then(mock => {
+          tempMock = mock;
+          return superagent.get(`${apiURL}/blogs/${mock.blog._id}`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body._id).toEqual(tempMock.blog._id.toString());
+          expect(res.body.body).toEqual(tempMock.blog.body);
+          expect(res.body.timestamp).toEqual(tempMock.blog.timestamp.toJSON());
+          expect(res.body.user._id).toEqual(tempMock.user._id.toString());
+        });
     });
   });
 });

@@ -127,14 +127,15 @@ describe('/users/', () => {
     });
 
     test('404 user not found', () => {
-      return superagent.put(`${apiURL}/users/badpath`)
-        .send({
-          username: 'myNewUserName',
-          email: 'new@email.com',
-        })
-        .then(Promise.reject)
-        .catch(res => {
-          expect(res.status).toEqual(404);
+
+      return userMock.create()
+        .then(() => {
+          return superagent.put(`${apiURL}/users/badpath`)
+            .send({})
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
         });
     });
   });
@@ -186,5 +187,6 @@ describe('/users/', () => {
         });
     });
   });
-  
+
 });
+
