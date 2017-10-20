@@ -15,28 +15,28 @@ const sandwichSchema = mongoose.Schema({
 
 sandwichSchema.pre('save', function(done){
   Menu.findById(this.menu)
-  .then(menu => {
-    if(!menu)
-      throw httpErrors(404, 'menu not found')
-    menu.sandwiches.push(this._id)
-    return menu.save()
-  })
-  .then(() => done())
-  .catch(done)
+    .then(menu => {
+      if(!menu)
+        throw httpErrors(404, 'menu not found')
+      menu.sandwiches.push(this._id)
+      return menu.save()
+    })
+    .then(() => done())
+    .catch(done)
 })
 
 sandwichSchema.post('remove', (doc, done) => {
   Menu.findById(doc.menu)
-  .then(menu => {
-    if(!menu)
-      throw httpErrors(404, 'menu not found')
-    menu.sandwiches = menu.sandwiches.filter(sandwich => {
-      return sandwich._id.toString() !== doc._id.toString()
+    .then(menu => {
+      if(!menu)
+        throw httpErrors(404, 'menu not found')
+      menu.sandwiches = menu.sandwiches.filter(sandwich => {
+        return sandwich._id.toString() !== doc._id.toString()
+      })
+      return menu.save()
     })
-    return menu.save()
-  })
-  .then(() => done())
-  .catch(done)
+    .then(() => done())
+    .catch(done)
 })
 
 module.exports = mongoose.model('sandwich', sandwichSchema)
