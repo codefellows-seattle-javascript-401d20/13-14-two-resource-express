@@ -57,4 +57,81 @@ To stop the database run `npm run dboff`.
 
 ## Api
 
-API
+### /USERS
+
+#### POST /users
+Takes in a json object with a require `username`, `email`, `fullname`, `password` and optional `city`, `state`, and `about` and returns a new user
+
+*e.g*
+`localhost:3000/users`
+```
+// returns
+{
+  username: 'johndoe',    // required
+  email: 'john@doe.com',  // required
+  fullname: 'John Doe',   // required
+  password: 'doeisRad',   // required
+  city: 'Seattle',
+  state: 'WA',
+  about: 'I am rad'
+}
+```
+
+#### GET /users
+
+returns an array of users
+`localhost:3000/users`
+
+
+#### GET /users/:id
+Takes in an `/user/:id` and returns the user based on the id
+
+*e.g*
+`localhost:3000/users:39ajj38984`
+```
+{
+  _id:'39ajj38984',
+  username: 'johndoe' ,   // required
+  email: 'john@doe.com', // required
+  fullname: 'John Doe',   // required
+  password: 'doeisRad',  // required
+  city: 'Seattle',
+  state: 'WA',
+  about: 'I am rad'
+}
+```
+
+
+#### PUT /users/:id
+Takes in an `/user/:id` and a json object and returns the updated user
+*e.g*
+`localhost:3000/users:39ajj38984`
+```
+{
+  city: 'New York',
+  stat: 'NY'
+}
+```
+
+```
+{
+  _id:39ajj38984
+  username: 'johndoe'    // required
+  email: 'john@doe.com'  // required
+  fullname: 'John Doe'   // required
+  password: 'doeisRad'   // required
+  city: 'Seattle'
+  city: 'New York',
+  stat: 'NY'
+}
+```
+
+#### DELETE /users
+Takes in a `/user/:id`, removes the user and returns a 204 status
+
+*e.g*
+`localhost:3000/users:39ajj38984`
+
+`// DELETES USER`
+
+### BLOGS

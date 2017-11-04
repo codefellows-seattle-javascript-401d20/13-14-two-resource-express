@@ -25,7 +25,6 @@ blogSchema.pre('save', function (done) {
     .catch(done);
 });
 
-
 blogSchema.post('remove', (doc, done) => {
   User.findById(doc.user)
     .then(user => {
