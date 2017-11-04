@@ -39,9 +39,7 @@ blogRouter.put('/blogs/:id', jsonParser, (req, res, next) => {
 blogRouter.delete('/blogs/:id', (req, res, next) => {
   console.log('hello');
   Blog.findByIdAndRemove(req.params.id)
-    .then(blog => {
-      if (!blog)
-        throw httpErrors(404, 'blog not found');
+    .then(() => {
       res.sendStatus(204);
     })
     .catch(next);

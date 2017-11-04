@@ -10,7 +10,6 @@ const blogSchema = mongoose.Schema({
   isPublished: { type: Boolean },
   timestamp: { type: Date, default: () => new Date() },
   user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'user' },
-
 });
 
 blogSchema.pre('save', function (done) {

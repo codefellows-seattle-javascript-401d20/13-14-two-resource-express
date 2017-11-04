@@ -55,11 +55,11 @@ MONGODB_URI=mongodb://localhost/dev
 To start the database and server, run the following command `npm run dbon && npm run start`.
 To stop the database run `npm run dboff`.
 
-## Api
+# Api
 
-### /USERS
+## /USERS
 
-#### POST /users
+### POST /users
 Takes in a json object with a require `username`, `email`, `fullname`, `password` and optional `city`, `state`, and `about` and returns a new user
 
 *e.g*
@@ -77,8 +77,8 @@ Takes in a json object with a require `username`, `email`, `fullname`, `password
 }
 ```
 
-#### GET /users/:id
-Takes in an `/user/:id` and returns the user based on the id
+### GET /users/:id
+Takes in an `/user/id` and returns the user based on the id
 
 *e.g*
 `localhost:3000/users:39ajj38984`
@@ -96,10 +96,10 @@ Takes in an `/user/:id` and returns the user based on the id
 ```
 
 
-#### PUT /users/:id
-Takes in an `/user/:id` and a json object and returns the updated user
+### PUT /users/:id
+Takes in an `/user/id` and a json object and returns the updated user
 *e.g*
-`localhost:3000/users:39ajj38984`
+`localhost:3000/users/39ajj38984`
 ```
 {
   city: 'New York',
@@ -113,19 +113,99 @@ Takes in an `/user/:id` and a json object and returns the updated user
   username: 'johndoe'    // required
   email: 'john@doe.com'  // required
   fullname: 'John Doe'   // required
-  password: 'doeisRad'   // required
+  password: 'doeIsRad'   // required
   city: 'Seattle'
   city: 'New York',
   stat: 'NY'
 }
 ```
 
-#### DELETE /users
-Takes in a `/user/:id`, removes the user and returns a 204 status
+### DELETE /users
+Takes in a `/user/id`, removes the user and returns a 204 status
 
 *e.g*
-`localhost:3000/users:39ajj38984`
+`localhost:3000/users/39ajj38984`
 
 `// DELETES USER`
 
 ### BLOGS
+
+### POST /blogs
+Takes in a `/blogs` and a `json object` with a `userID` returns a blog for the `/blogs`
+
+*e.g*
+`localhost:3000/blogs/`
+
+```
+{
+  user: '39ajj38984'
+  body: 'this is the body',
+  isPublished: false
+}
+```
+returns
+```
+{
+	"_id" : 59fe38001d,
+	"title" : "Hello World",
+	"user" : _id(39ajj38984),
+	"timestamp" : ISODate("2017-11-04T21:58:24.486Z"),
+	"body" : "this is the body",
+  "isPublished": false
+	"__v" : 0
+}
+```
+
+### GET /blogs/id
+Takes the `/blogs/id` and returns the blog
+
+*e.g*
+`localhost:3000/blogs/59fe38001d`
+
+```
+{
+	"_id" : 59fe38001d,
+	"title" : "Hello World",
+	"user" : _id(39ajj38984),
+	"timestamp" : ISODate("2017-11-04T21:58:24.486Z"),
+	"body" : "this is the body",
+  "isPublished": true
+	"__v" : 0
+}
+```
+
+
+### PUT /blogs/id
+
+Takes in a `/blogs/id` and `json object` returns the updated blog
+
+*e.g*
+`localhost:3000/blogs/59fe38001d`
+
+```
+{
+  body: 'this is the new body',
+  isPublished: true
+}
+```
+returns
+```
+{
+	"_id" : 59fe38001d,
+	"title" : "Hello World",
+	"user" : _id(39ajj38984),
+	"timestamp" : ISODate("2017-11-04T21:58:24.486Z"),
+	"body" : "this is the new body",
+  "isPublished": true
+	"__v" : 0
+}
+```
+
+### DELETE /blogs
+
+Takes in a `/blogs/id`, removes the blog and returns a 204 status
+
+*e.g*
+`localhost:3000/blog/39ajj38984`
+
+`// DELETES BLOG`
