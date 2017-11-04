@@ -10,8 +10,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 const app = express();
-let isOn = false;
-let http = null;
+let server = null;
 
 // register middleware
 
@@ -19,40 +18,38 @@ app.use(cors({ origin: process.env.CORS_ORIGIN })); // for browser request suppo
 app.use(morgan('dev')); // morgan logger 
 
 // routes
+app.use(require('../route/user-route.js'));
+app.use(require('../route/blog-route.js'));
+// 404s
 app.all('*', (req, res) => res.sendStatus(404));
+// error
+app.use(require('./error-middleware'));
 
 // export interface
-
 module.exports = {
   start: () => {
     return new Promise((resolve, reject) => {
-      if (isOn)
+      if (server)
         return reject(new Error('SERVER ERROR: server already running'));
-      http = app.listen(process.env.PORT, () => {
-        isOn = true;
+      server = app.listen(process.env.PORT, () => {
         console.log('SERVER RUNNING ON', process.env.PORT);
         resolve();
       });
     })
-
       .then(() => {
         return mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
       });
   },
   stop: () => {
     return new Promise((resolve, reject) => {
-      if (!isOn)
+      if (!server)
         return reject(new Error('SERVER ERROR: server already off'));
-      if (!http)
-        return reject(new Error('SERVER ERROR: server does not exist'));
-      http.close(() => {
-        isOn = false;
-        http = null;
+      server.close(() => {
+        server = null;
         console.log('SERVER OFF');
         resolve();
       });
     })
       .then(() => mongoose.disconnect());
-
   },
 };
