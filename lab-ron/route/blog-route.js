@@ -11,8 +11,6 @@ blogRouter.get('/blogs/:id', (req, res, next) => {
   Blog.findById(req.params.id)
     .populate('user')
     .then(blog => {
-      if (!blog)
-        return httpErrors(404, 'blog not found');
       res.json(blog);
     })
     .catch(next);
