@@ -24,5 +24,28 @@ blogRouter.post('/blogs', jsonParser, (req, res, next) => {
     .catch(next);
 });
 
+blogRouter.put('/blogs/:id', jsonParser, (req, res, next) => {
+  let options = { new: true, runValidators: true };
+  Blog.findByIdAndUpdate(req.params.id, req.body, options)
+    .then(blog => {
+      /// WHY?????
+      if (!blog) {
+        console.log('---> IS IT GETTING HERE???');
+        throw httpErrors(404, 'blog not found here');
+      }
+      res.json(blog);
+    })
+    .catch(next);
+});
 
+blogRouter.delete('/blogs/:id', (req, res, next) => {
+  console.log('hello');
+  Blog.findByIdAndRemove(req.params.id)
+    .then(blog => {
+      if (!blog)
+        throw httpErrors(404, 'blog not found');
+      res.sendStatus(204);
+    })
+    .catch(next);
+});
 

@@ -67,4 +67,57 @@ describe('/blogs', () => {
         });
     });
   });
+
+  describe('PUT /blogs/:id', () => {
+    test('returns 200 and a blog', () => {
+      let tempMock;
+      return blogMock.create()
+        .then(mock => {
+          tempMock = mock;
+          return superagent.put(`${apiURL}/blogs/${mock.blog._id}`)
+            .send({ body: 'this is my new entry for my blog :P' });
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body._id).toEqual(tempMock.blog._id.toString());
+          expect(res.body.body).toEqual('this is my new entry for my blog :P');
+        });
+    });
+
+    test('returns 404 ', () => {
+      return blogMock.create()
+        .then(() => superagent.put(`${apiURL}/blogs/badID`))
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+
+    });
+
+
+  });
+
+  describe('DELETE /blogs/:id', () => {
+
+    test('returns 204', () => {
+      return blogMock.create()
+        .then(mock => {
+          return superagent.delete(`${apiURL}/blogs/${mock.blog._id}`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(204);
+        });
+    });
+
+    test('returns 404 badID', () => {
+      return blogMock.create()
+        .then(() => superagent.delete(`${apiURL}/blogs/badID`))
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+
+    });
+
+  });
 });

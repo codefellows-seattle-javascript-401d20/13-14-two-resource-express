@@ -77,12 +77,6 @@ Takes in a json object with a require `username`, `email`, `fullname`, `password
 }
 ```
 
-#### GET /users
-
-returns an array of users
-`localhost:3000/users`
-
-
 #### GET /users/:id
 Takes in an `/user/:id` and returns the user based on the id
 
