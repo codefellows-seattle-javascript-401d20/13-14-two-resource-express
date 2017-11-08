@@ -12,6 +12,7 @@ const apiURL = `http://localhost:${process.env.PORT}`;
 describe('/blogs', () => {
   beforeAll(server.start);
   afterAll(server.stop);
+  afterEach(userMock.remove);
   afterEach(blogMock.remove);
 
   describe('POST /blogs/id', () => {
@@ -59,6 +60,8 @@ describe('/blogs', () => {
           return superagent.get(`${apiURL}/blogs/${mock.blog._id}`);
         })
         .then(res => {
+           console.log('--> GET BLOG :', res.body)
+           console.log('--> GET USER :', res.body.user)
           expect(res.status).toEqual(200);
           expect(res.body._id).toEqual(tempMock.blog._id.toString());
           expect(res.body.body).toEqual(tempMock.blog.body);

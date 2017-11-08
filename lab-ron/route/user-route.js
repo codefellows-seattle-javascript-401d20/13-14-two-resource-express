@@ -23,7 +23,7 @@ userRouter.put('/users/:id', jsonParser, (req, res, next) => {
       if (!user) {
         throw httpErrors(404, 'user not found here');
       }
-      console.log(user);
+      // console.log(user);
       res.json(user);
     })
     .catch(next);

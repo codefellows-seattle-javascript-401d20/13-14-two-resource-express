@@ -17,6 +17,7 @@ blogSchema.pre('save', function (done) {
     .then(user => {
       if (!user)
         throw httpErrors(404, 'user not found');
+      
       user.blogs.push(this._id);
       return user.save();
     })

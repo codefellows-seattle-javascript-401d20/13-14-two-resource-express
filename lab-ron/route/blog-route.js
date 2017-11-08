@@ -37,7 +37,6 @@ blogRouter.put('/blogs/:id', jsonParser, (req, res, next) => {
 });
 
 blogRouter.delete('/blogs/:id', (req, res, next) => {
-  console.log('hello');
   Blog.findByIdAndRemove(req.params.id)
     .then(() => {
       res.sendStatus(204);
